@@ -6,9 +6,7 @@ var express = require('express');
 //var path = require('path');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-var fs = require('fs');
-var server_port = 80;
+var WebSocketServer = require('ws').Server, wss = new WebSocketServer({port: 80})
 
 var ascoltatore = {
   //using ascoltatore
@@ -61,18 +59,19 @@ function setup() {
   console.log('Mosca server is up and running')
 }
 
-app.get('/', (req, res) => {
+wss.on('connection', function (ws) {
+  ws.on('message', function (message) {
+    console.log('received: %s', message)
+  })
+})
 
-  res.send('Chat Server is running on port 80')
-  });
-  server.listen(server_port);
-io.sockets.on('connection', function (socket) {
-  console.log('connected');
-  socket.emit('connection');
-  socket.on('connected', function (data) {
-    console.log(data);
-  });
+app.get('/', function (req, res) {
+  res.sendfile('/home/sideptr/workspace/PirateKing/source/html/ws.html');
 });
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+})
 
 
 
