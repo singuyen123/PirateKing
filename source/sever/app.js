@@ -39,7 +39,7 @@ MongoClient.connect(mongodbUrl, function (err, db) {
 
   db.collection("mycollection").findOne({}, function (err, result) {
     if (err) throw err;
-    console.log(result.abc);
+    // console.log(result.abc);
     db.close();
   });
 
@@ -68,7 +68,9 @@ wss.on('connection', function (ws) {
 app.get('/', function (req, res) {
   res.sendfile('/home/sideptr/workspace/PirateKing/source/html/ws.html');
 });
-
+app.get('/signin', function (req, res) {
+  res.sendfile('/home/sideptr/workspace/PirateKing/source/html/signin.html');
+});
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
