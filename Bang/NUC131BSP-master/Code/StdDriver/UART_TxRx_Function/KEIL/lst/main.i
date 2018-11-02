@@ -18399,7 +18399,435 @@ void CLK_DisableSysTick(void);
  
 
 #line 13 "..\\main.c"
+#line 1 "..\\..\\..\\..\\Library\\Include\\Driver\\DrvGPIO.h"
+ 
+ 
+ 
+ 
+ 
 
+
+
+#line 10 "..\\..\\..\\..\\Library\\Include\\Driver\\DrvGPIO.h"
+#line 1 "..\\..\\..\\..\\Library\\Include\\System\\ModuleID.h"
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+typedef enum
+{
+	 
+	
+	 
+	MODULE_ID_DRVPROTECT		= 0,		 
+
+	MODULE_ID_DRVADC			= 2,		 
+	MODULE_ID_DRVAIC			= 4,		 
+	MODULE_ID_DRVAPU			= 6,		 
+	MODULE_ID_DRVAUDIOADC		= 8,		 
+	MODULE_ID_DRVCACHE			= 10,		 
+	MODULE_ID_DRVCAN			= 11,		 
+	MODULE_ID_DRVEBI			= 12,		 
+	MODULE_ID_DRVEDMA			= 13,		 
+	MODULE_ID_DRVGDMA			= 14,		 
+	MODULE_ID_DRVFSC			= 15,		 
+	MODULE_ID_DRVGE				= 16,		 
+	MODULE_ID_DRVFMC			= 17,		 
+	MODULE_ID_DRVGPIO			= 18,		 
+	
+	MODULE_ID_DRVGPU			= 20,		 
+	MODULE_ID_DRVI2C			= 22,		 
+	MODULE_ID_DRVI2S			= 24,		 
+	MODULE_ID_DRVI2SM			= 26,		 
+	MODULE_ID_DRVMPU			= 28,		 
+	MODULE_ID_DRVNAND			= 30,		 
+	MODULE_ID_DRVNOR			= 32,		 
+	MODULE_ID_DRVPDMA     		= 33,        
+	MODULE_ID_DRVPWM			= 34,		 
+	MODULE_ID_DRVPS2			= 35,		 
+	MODULE_ID_DRVRTC			= 36,		 
+	MODULE_ID_DRVSDCARD			= 38,		 
+	MODULE_ID_DRVSIO			= 39,		 
+
+	MODULE_ID_DRVSPI			= 40,		 
+	MODULE_ID_DRVSPIMS			= 41,		 
+	MODULE_ID_DRVSPIFLASH		= 42,		 
+	MODULE_ID_DRVSPIM			= 43,		 
+	MODULE_ID_DRVSYS			= 44,		 
+	MODULE_ID_DRVSPU			= 45,		 
+	MODULE_ID_DRVTIMER			= 46,		 
+	MODULE_ID_DRVUART			= 48,		 
+	MODULE_ID_DRVUSB			= 50,		 
+	MODULE_ID_DRVUSBH			= 52,		 
+	MODULE_ID_DRVVDMA			= 54,		 
+	MODULE_ID_DRVVIDEOIN		= 56,		 
+	MODULE_ID_DRVVPOST			= 58,		 
+
+	MODULE_ID_DRVVRAM			= 60,		 
+	MODULE_ID_DRVW55U02			= 62,		 
+	MODULE_ID_DRVI2CH			= 64,		 
+	MODULE_ID_DRVWDT			= 66,		 
+	MODULE_ID_DRVJPEG			= 68,		 
+	
+	MODULE_ID_DRVZEROG			= 70,		 
+	MODULE_ID_DRVSI2C			= 71,		 
+
+	 
+	MODULE_ID_AEC				= 81,		 
+	MODULE_ID_BEATDET			= 82,		 
+	MODULE_ID_SNDEFF			= 83,		 
+	MODULE_ID_AUDIOSYN			= 84,		 
+	MODULE_ID_G726ADPCM			= 85,		 
+	MODULE_ID_IMAADPCM			= 86,		 
+	MODULE_ID_MP3DEC			= 88,		 
+	MODULE_ID_PITCHCHANGE		= 90,		 
+	MODULE_ID_WAVFILEUTIL		= 92,		 
+	MODULE_ID_WMADEC			= 96,		 
+	MODULE_ID_WMADECDRM			= 98,		 
+	MODULE_ID_AUDIOCTRL			= 100,		 
+	MODULE_ID_EQ				= 106,		 
+	MODULE_ID_OGGDEC			= 110,		 
+	MODULE_ID_MP3ENC			= 112,		 
+	MODULE_ID_UADEC				= 114,		 
+	MODULE_ID_ULSPEECHDEC		= 115,		 
+	MODULE_ID_USPEECHDEC		= 116,		 
+	MODULE_ID_SPEECHRECOG		= 118,		 
+
+	 
+	MODULE_ID_FS				= 120,		 
+	
+	 
+	MODULE_ID_FL				= 128,		 
+	
+	 
+	MODULE_ID_KEYPAD			= 130,		 
+	MODULE_ID_LWIP				= 132,		 
+	MODULE_ID_WLANMGR			= 134,		 
+	MODULE_ID_HTTPD				= 136,		 
+	MODULE_ID_VIRTUALCOM		= 139,		 
+
+	 
+	MODULE_ID_GFXRESLDR			= 140,		 
+	MODULE_ID_GFXLIB			= 141,		 
+	MODULE_ID_IMGPROC			= 142,		 
+	MODULE_ID_JPEG				= 144,		 
+	MODULE_ID_PNGDEC			= 146,		 
+	MODULE_ID_BARCODE2D			= 148,		 	 
+	MODULE_ID_PTNRECOG			= 150,		 
+	MODULE_ID_MOTIONDET			= 152,		 
+	
+	 
+	MODULE_ID_STORIF			= 160,		 
+	MODULE_ID_SDCARD			= 161,		 
+	MODULE_ID_SYSNAND			= 162,		 
+	MODULE_ID_SPIFLASH			= 163,		 
+	MODULE_ID_WTRIF				= 164,		 
+	MODULE_ID_NORFLASH			= 165,		 
+	MODULE_ID_SYSNANDLITE		= 166,		 
+	
+	 
+	MODULE_ID_INTMGR			= 180,		 
+	MODULE_ID_BLKLDR			= 181,		 
+	MODULE_ID_MEMMGR			= 182,		 
+	MODULE_ID_EVTMGR			= 183,		 
+	MODULE_ID_PROF				= 184,		 
+	MODULE_ID_PROGLDR			= 186,		 
+	MODULE_ID_SYSINFRA			= 188,		 
+	MODULE_ID_TIMERCTRL			= 190,		 
+	MODULE_ID_TIMEUTIL			= 192,		 
+	MODULE_ID_CONPROGLDR		= 194,		 
+	
+	 
+	MODULE_ID_USBCOREH			= 78,		 
+	MODULE_ID_HID				= 220,		 
+	MODULE_ID_MASSSTOR			= 222,		 
+	MODULE_ID_MASSSTORHID		= 224,		 
+	MODULE_ID_MASSSTORLITE		= 226,		 
+	MODULE_ID_MTP				= 230,		 
+	MODULE_ID_USBINFRA			= 232,		 
+	MODULE_ID_UAC				= 234,		 
+	MODULE_ID_UAVC				= 236,		 
+	MODULE_ID_UVC				= 238,		 
+	MODULE_ID_MASSSTORH			= 252,		 
+	MODULE_ID_HIDH				= 254,		 
+	MODULE_ID_VCOM				= 253,		 
+
+	 
+	MODULE_ID_MSDRMPD			= 228,		 
+	
+	 
+	MODULE_ID_AVICODEC			= 240,		 
+	MODULE_ID_MJPEG				= 242,		 
+	MODULE_ID_WIVICORE			= 244,		 
+	MODULE_ID_WIVI				= 246,		 	
+	MODULE_ID_AVCTRL			= 248,		 
+	MODULE_ID_AVIUTIL			= 250,		 
+	
+	 
+	MODULE_ID_WTCHAN			= 168,		 
+	MODULE_ID_WTCMDSERV			= 170,		 
+	MODULE_ID_WTDISPLAY			= 172,		 
+	MODULE_ID_WTMEDIA			= 174,		 
+	MODULE_ID_WTSYS				= 176,		 
+	MODULE_ID_WTTRANS			= 178,		 
+	
+	
+} E_SYSINFRA_MODULE_ID;
+
+
+#line 11 "..\\..\\..\\..\\Library\\Include\\Driver\\DrvGPIO.h"
+#line 1 "..\\..\\..\\..\\Library\\Include\\System\\SysInfra.h"
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+ 
+ 
+ 
+#line 15 "..\\..\\..\\..\\Library\\Include\\System\\SysInfra.h"
+#line 16 "..\\..\\..\\..\\Library\\Include\\System\\SysInfra.h"
+#line 1 "..\\..\\..\\..\\Library\\CMSIS\\Include\\core_cm0.h"
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+#line 120 "..\\..\\..\\..\\Library\\CMSIS\\Include\\core_cm0.h"
+
+
+
+#line 666 "..\\..\\..\\..\\Library\\CMSIS\\Include\\core_cm0.h"
+
+
+
+   
+
+#line 17 "..\\..\\..\\..\\Library\\Include\\System\\SysInfra.h"
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+ 
+
+
+
+ 
+
+ 
+
+ 
+
+
+ 
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 12 "..\\..\\..\\..\\Library\\Include\\Driver\\DrvGPIO.h"
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+ 
+
+							   
+ 
+ 
+ 
+
+
+
+
+typedef void (*GPIO_GPAB_CALLBACK)(uint32_t u32GPAStatus, uint32_t u32GPBStatus);
+typedef void (*GPIO_GPCDE_CALLBACK)(uint32_t u32GPCStatus, uint32_t u32GPDStatus, uint32_t u32GPEStatus);
+typedef void (*GPIO_EINT0_CALLBACK)(void);
+typedef void (*GPIO_EINT1_CALLBACK)(void);
+
+ 
+#line 118 "..\\..\\..\\..\\Library\\Include\\Driver\\DrvGPIO.h"
+
+typedef enum 
+{
+	E_GPA = 0,
+	E_GPB = 1, 
+	E_GPC = 2, 
+	E_GPD = 3, 
+	E_GPE = 4
+} E_DRVGPIO_PORT;
+
+typedef enum 
+{
+    E_IO_INPUT = 0,
+    E_IO_OUTPUT,
+    E_IO_OPENDRAIN,
+    E_IO_QUASI
+} E_DRVGPIO_IO;
+
+typedef enum 
+{
+    E_IO_RISING = 0,
+    E_IO_FALLING,
+    E_IO_BOTH_EDGE
+} E_DRVGPIO_INT_TYPE;
+
+typedef enum
+{
+    E_MODE_EDGE = 0,
+    E_MODE_LEVEL
+} E_DRVGPIO_INT_MODE;
+
+typedef enum
+{
+    E_DBCLKSRC_HCLK = 0, 
+    E_DBCLKSRC_10K = 1
+} E_DRVGPIO_DBCLKSRC;	   
+
+typedef enum
+{
+	  E_FUNC_GPIO,    E_FUNC_CLKO,    E_FUNC_I2C0,    E_FUNC_I2C1,    E_FUNC_I2S,     E_FUNC_CAN0,	
+    E_FUNC_ACMP0,   E_FUNC_ACMP1,   
+    E_FUNC_SPI0,    E_FUNC_SPI0_SS1,    E_FUNC_SPI0_2BIT_MODE,
+    E_FUNC_SPI1,    E_FUNC_SPI1_SS1,    E_FUNC_SPI1_2BIT_MODE,
+    E_FUNC_SPI2,    E_FUNC_SPI2_SS1,    E_FUNC_SPI2_2BIT_MODE,
+    E_FUNC_SPI3,    E_FUNC_SPI3_SS1,    E_FUNC_SPI3_2BIT_MODE,      
+    E_FUNC_SPI0_QFN36PIN,   E_FUNC_SPI0_SS1_QFN36PIN,   E_FUNC_SPI0_2BIT_MODE_QFN36PIN,
+    E_FUNC_ADC0,    E_FUNC_ADC1,    E_FUNC_ADC2,    E_FUNC_ADC3,    E_FUNC_ADC4,    E_FUNC_ADC5,
+    E_FUNC_ADC6,    E_FUNC_ADC7,    E_FUNC_EXTINT0, E_FUNC_EXTINT1, E_FUNC_TMR0,    E_FUNC_TMR1,      
+    E_FUNC_TMR2,    E_FUNC_TMR3,    E_FUNC_T0EX,    E_FUNC_T1EX,    E_FUNC_T2EX,    E_FUNC_T3EX,
+    E_FUNC_UART0,   E_FUNC_UART0_RX_TX, E_FUNC_UART0_RTS_CTS,
+    E_FUNC_UART1,   E_FUNC_UART1_RX_TX, E_FUNC_UART1_RTS_CTS,       E_FUNC_UART2,
+    E_FUNC_PWM01,   E_FUNC_PWM23,   E_FUNC_PWM45,   E_FUNC_PWM67,   E_FUNC_PWM0,    E_FUNC_PWM1,
+    E_FUNC_PWM2,    E_FUNC_PWM3,    E_FUNC_PWM4,    E_FUNC_PWM5,    E_FUNC_PWM6,    E_FUNC_PWM7,    
+    E_FUNC_EBI_8B,  E_FUNC_EBI_16B,          
+} E_DRVGPIO_FUNC;
+			  
+ 
+ 
+ 
+int32_t DrvGPIO_Open(E_DRVGPIO_PORT port, int32_t i32Bit, E_DRVGPIO_IO mode);
+int32_t DrvGPIO_Close(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_SetBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_GetBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_ClrBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_SetPortBits(E_DRVGPIO_PORT port, int32_t i32Data);
+int32_t DrvGPIO_GetPortBits(E_DRVGPIO_PORT port);
+int32_t DrvGPIO_GetDoutBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_GetPortDoutBits(E_DRVGPIO_PORT port);
+int32_t DrvGPIO_SetBitMask(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_GetBitMask(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_ClrBitMask(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_SetPortMask(E_DRVGPIO_PORT port, int32_t i32MaskData);
+int32_t DrvGPIO_GetPortMask(E_DRVGPIO_PORT port);
+int32_t DrvGPIO_ClrPortMask(E_DRVGPIO_PORT port, int32_t i32MaskData);
+int32_t DrvGPIO_EnableDigitalInputBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_DisableDigitalInputBit(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_EnableDebounce(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_DisableDebounce(E_DRVGPIO_PORT port, int32_t i32Bit);
+int32_t DrvGPIO_SetDebounceTime(uint32_t u32CycleSelection, E_DRVGPIO_DBCLKSRC ClockSource);
+int32_t DrvGPIO_GetDebounceSampleCycle(void);
+int32_t DrvGPIO_EnableInt(E_DRVGPIO_PORT port, int32_t i32Bit, E_DRVGPIO_INT_TYPE TriggerType, E_DRVGPIO_INT_MODE Mode);
+int32_t DrvGPIO_DisableInt(E_DRVGPIO_PORT port, int32_t i32Bit);
+void DrvGPIO_SetIntCallback(GPIO_GPAB_CALLBACK pfGPABCallback, GPIO_GPCDE_CALLBACK pfGPCDECallback);
+void DrvGPIO_EnableEINT0(E_DRVGPIO_INT_TYPE TriggerType, E_DRVGPIO_INT_MODE Mode, GPIO_EINT0_CALLBACK pfEINT0Callback);
+void DrvGPIO_DisableEINT0(void);
+void DrvGPIO_EnableEINT1(E_DRVGPIO_INT_TYPE TriggerType, E_DRVGPIO_INT_MODE Mode, GPIO_EINT1_CALLBACK pfEINT1Callback);
+void DrvGPIO_DisableEINT1(void);
+int32_t DrvGPIO_GetIntStatus(E_DRVGPIO_PORT port);
+int32_t DrvGPIO_InitFunction(E_DRVGPIO_FUNC function);
+int32_t DrvGPIO_GetVersion(void);
+void delay(void);
+uint8_t Scankey(void);
+
+
+
+
+
+
+
+
+
+#line 14 "..\\main.c"
 
 
 
@@ -18500,7 +18928,31 @@ int main(void)
     UART0_Init();
     while(1)
 		{
-				printf("%d.",data);
+			
+			if(Scankey()==2)
+			{
+				printf("s.");
+			}
+			
+			if(Scankey()==4)
+			{
+				printf("a.");
+			}
+			
+			if(Scankey()==5)
+			{
+				printf("q.");
+			}
+			
+			if(Scankey()==6)
+			{
+				printf("d.");
+			}
+			
+			if(Scankey()==8)
+			{
+				printf("w.");
+			}
 		
 			
 		}

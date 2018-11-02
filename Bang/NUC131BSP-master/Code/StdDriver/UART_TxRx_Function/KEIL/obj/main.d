@@ -21,3 +21,7 @@
 .\obj\main.o: ..\..\..\..\Library\StdDriver\inc\WWDT.h
 .\obj\main.o: ..\..\..\..\Library\StdDriver\inc\UART.h
 .\obj\main.o: ..\..\..\..\Library\StdDriver\inc\CLK.h
+.\obj\main.o: ..\..\..\..\Library\Include\Driver\DrvGPIO.h
+.\obj\main.o: ..\..\..\..\Library\Include\System\ModuleID.h
+.\obj\main.o: ..\..\..\..\Library\Include\System\SysInfra.h
+.\obj\main.o: ..\..\..\..\Library\CMSIS\Include\core_cm0.h

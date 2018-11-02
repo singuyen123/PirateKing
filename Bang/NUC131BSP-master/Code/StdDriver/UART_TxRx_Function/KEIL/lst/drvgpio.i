@@ -18811,7 +18811,8 @@ void DrvGPIO_DisableEINT1(void);
 int32_t DrvGPIO_GetIntStatus(E_DRVGPIO_PORT port);
 int32_t DrvGPIO_InitFunction(E_DRVGPIO_FUNC function);
 int32_t DrvGPIO_GetVersion(void);
-
+void delay(void);
+uint8_t Scankey(void);
 
 
 
@@ -20285,4 +20286,34 @@ int32_t DrvGPIO_ClrBit(E_DRVGPIO_PORT port, int32_t i32Bit)
 
 
 
+uint8_t Scankey(void)
+{
+	uint8_t act[4]={0x3b, 0x3d, 0x3e};    
+	uint8_t i,temp,pin;
 
+	for(i=0;i<3;i++)
+	{
+		temp=act[i];
+		for(pin=9;pin<15;pin++)
+		{
+			if((temp&0x01)==0x01)
+				DrvGPIO_SetBit(E_GPA,pin);
+			else
+				DrvGPIO_ClrBit(E_GPA,pin);
+			temp>>=1;
+		}
+		delay();
+		if(DrvGPIO_GetBit(E_GPA,3)==0)
+			return(i+1);
+		if(DrvGPIO_GetBit(E_GPA,4)==0)
+			return(i+4);
+		if(DrvGPIO_GetBit(E_GPA,5)==0)
+			return(i+7);
+	}
+		return 0;
+}
+void delay(void)
+{
+	int j;
+	for(j=0;j<1000;j++);
+}

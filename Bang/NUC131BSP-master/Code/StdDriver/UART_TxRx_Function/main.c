@@ -10,7 +10,7 @@
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC131.h"
-
+#include "DrvGPIO.h"
 
 #define PLL_CLOCK   50000000
 
@@ -111,7 +111,31 @@ int main(void)
     UART0_Init();
     while(1)
 		{
-				printf("%d.",data);
+			//up
+			if(Scankey()==2)
+			{
+				printf("s.");
+			}
+			//left
+			if(Scankey()==4)
+			{
+				printf("a.");
+			}
+			//ok
+			if(Scankey()==5)
+			{
+				printf("q.");
+			}
+			//right
+			if(Scankey()==6)
+			{
+				printf("d.");
+			}
+			//down
+			if(Scankey()==8)
+			{
+				printf("w.");
+			}
 		
 			
 		}
