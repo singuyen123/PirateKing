@@ -1,14 +1,52 @@
-const PORT = 7070;									//√êat dia chi Port duoc mo ra de tao ra chuong trinh mang Socket Server
+const PORT = 7070;									//–at dia chi Port duoc mo ra de tao ra chuong trinh mang Socket Server
  
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var mongodbUrl = "mongodb://localhost:27017/test";
+var express = require('express');
+
 var http = require('http') 							//#include thu vien http -
 var socketio = require('socket.io')				//#include thu vien socketio
- 
+
 var ip = require('ip');
-var app = http.createServer();					//#Khoi tao mot chuong tr√¨nh mang (app)
-var io = socketio(app);								//#Phai khoi tao io sau khi tao app!
-app.listen(PORT);										// Cho socket server (chuong trinh mang) lang nghe ? port 
-console.log("Server nodejs chay tai dia chi: " + ip.address() + ":" + PORT)
- 
+var ws = require('ws');
+var app = express();
+
+var server = http.createServer(app);
+var WebSocketServer = ws.Server, wss = new WebSocketServer({port: 80})
+var io = socketio(server);	
+server.listen(PORT, function () {
+    console.log("Server nodejs chay tai dia chi: " + ip.address() + ":" + PORT)
+    })
+
+var ascoltatore = {
+  //using ascoltatore
+  type: 'mongo',
+  url: 'mongodb://localhost:27017/mqtt',
+  pubsubCollection: 'ascoltatori',
+  mongo: {}
+};
+
+MongoClient.connect(mongodbUrl, function (err, db) {
+    assert.equal(null, err);
+    //var txt = db.collection('mycollection').findOne();
+    //console.log(txt);
+    // db.collection("mycollection").find({}).toArray(function(err, result) {
+    //   if (err) throw err;
+    //   console.log(result);
+    //   db.close();
+    // });
+  
+    db.collection("mycollection").findOne({}, function (err, result) {
+      if (err) throw err;
+      // console.log(result.abc);
+      db.close();
+    });
+  
+  });
+
+
+
 //giai nen chuoi JSON thanh cac OBJECT
 function ParseJson(jsondata) {
     try {
@@ -18,25 +56,25 @@ function ParseJson(jsondata) {
     }
 }
  
-//Gui du lieu th√¥ng qua 
+//Gui du lieu thÙng qua 
 function sendTime() {
 	
-	//√êay la mot chuoi JSON
+	//–ay la mot chuoi JSON
 	var json = {
 	    status: "bi ban", 	//kieu chuoi
-        x     : 12,									//so nguy√™n
+        x     : 12,									//so nguyÍn
 		y     : 3.14,							    //so thuc
-		time: new Date()							//√êoi tuong Thoi gian
+		time: new Date()							//–oi tuong Thoi gian
     }
     io.sockets.emit('atime', json);
 }
  
-//Khi co mot ket noi duoc tao giua Socket Client v√† Socket Server
+//Khi co mot ket noi duoc tao giua Socket Client v‡ Socket Server
 io.on('connection', function(socket) {	//'connection' (1) nay khac gi voi 'connection' (2)
 	
     console.log("Connected"); //In ra windowm console la da co mot Socket Client ket noi thanh cong.
 	
-	//Gui di lenh 'welcome' voi mot tham so la mot bien JSON. Trong bien JSON nay co mot tham so va tham so do ten la message. Kieu du lieu cua tham so l√† mot chuoi.
+	//Gui di lenh 'welcome' voi mot tham so la mot bien JSON. Trong bien JSON nay co mot tham so va tham so do ten la message. Kieu du lieu cua tham so l‡ mot chuoi.
     socket.emit('welcome', {
         message: 'Connected !!!!'
     });
@@ -80,3 +118,11 @@ io.on('connection', function(socket) {	//'connection' (1) nay khac gi voi 'conne
       console.log(data);
     });
 });
+
+    app.get('/', function (req, res) {
+        res.sendfile('/home/sideptr/workspace/PirateKing/source/html/ws.html');
+    });
+    app.get('/signin', function (req, res) {
+     res.sendfile('/home/bang/Workspace/PirateKing/source/html/signin.html');
+    });
+   
