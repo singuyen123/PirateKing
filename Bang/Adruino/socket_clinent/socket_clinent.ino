@@ -1,18 +1,18 @@
-#include <SoftwareSerial.h>
+
 #include <SocketIOClient.h>
 #include <ESP8266WiFi.h>
 
  
 SocketIOClient client;
-const char* ssid = "UIT_Guest";          //Tên mạng Wifi mà Socket server của bạn đang kết nối
-const char* password = "1denmuoi1";  //Pass mạng wifi ahihi, anh em rãnh thì share pass cho mình với.
-//const char* ssid      =  "TRUNG TAM KTX";
-//const char* password  =  "Nhu mat khau cu.";
+//const char* ssid = "UIT_Guest";          //name Wifi ma Socket server connecting
+//const char* password = "1denmuoi1";  //Pass wifi 
+const char* ssid      =  "TRUNG TAM KTX";
+const char* password  =  "Nhu mat khau cu.";
 
 String InString= "";
-char host[] = "128.199.225.158";  //Địa chỉ IP dịch vụ, hãy thay đổi nó theo địa chỉ IP Socket server của bạn.
-int port = 7070;                  //Cổng dịch vụ socket server do chúng ta tạo!
-SoftwareSerial mySerial(3, 1); // RX, TX
+char host[] = "128.199.225.158";  //address IP service
+int port = 7070;                  //port server create
+
 //từ khóa extern: dùng để #include các biến toàn cục ở một số thư viện khác. Trong thư viện SocketIOClient có hai biến toàn cục
 // mà chúng ta cần quan tâm đó là
 // RID: Tên hàm (tên sự kiện
@@ -36,31 +36,31 @@ void setup()
     Serial.print("Ket noi vao mang ");
     Serial.println(ssid);
  
-//    //Kết nối vào mạng Wifi
-//    WiFi.begin(ssid, password);
-// 
-//    //Chờ đến khi đã được kết nối
-//    while (WiFi.status() != WL_CONNECTED) { //Thoát ra khỏi vòng 
-//        delay(500);
-//        Serial.print('.');
-//    }
-// 
-//    Serial.println();
-//    Serial.println(F("Da ket noi WiFi"));
-//    Serial.println(F("Di chi IP cua ESP8266 (Socket Client ESP8266): "));
-//    Serial.println(WiFi.localIP());
-// 
-//    if (!client.connect(host, port)) {
-//        Serial.println(F("Ket noi den socket server that bai!"));
-//        return;
-//    }
-// 
-//    //Khi đã kết nối thành công
-//    if (client.connected()) {
-//        //Thì gửi sự kiện ("connection") đến Socket server ahihi.
-//        Serial.print("Ket noi den socket server thanh cong");
-//        client.send("connection", "message", "Connected !!!!");
-//    }
+    //Kết nối vào mạng Wifi
+    WiFi.begin(ssid, password);
+ 
+    //Chờ đến khi đã được kết nối
+    while (WiFi.status() != WL_CONNECTED) { //Thoát ra khỏi vòng 
+        delay(500);
+        Serial.print('.');
+    }
+ 
+    Serial.println();
+    Serial.println(F("Da ket noi WiFi"));
+    Serial.println(F("Di chi IP cua ESP8266 (Socket Client ESP8266): "));
+    Serial.println(WiFi.localIP());
+ 
+    if (!client.connect(host, port)) {
+        Serial.println(F("Ket noi den socket server that bai!"));
+        return;
+    }
+ 
+    //Khi đã kết nối thành công
+    if (client.connected()) {
+        //Thì gửi sự kiện ("connection") đến Socket server ahihi.
+        Serial.print("Ket noi den socket server thanh cong");
+        client.send("connection", "message", "Connected !!!!");
+    }
 }
  
 void loop()
