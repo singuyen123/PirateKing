@@ -23,15 +23,13 @@ extern String Rfull;
  
 //Một số biến dùng cho việc tạo một task
 unsigned long previousMillis = 0;
-long interval = 2000;
+long interval = 10000;
  
 void setup()
 {
     //Bật baudrate ở mức 115200 để giao tiếp với máy tính qua Serial
     Serial.begin(115200);
     delay(10);
-//    mySerial.begin(9600);
-//    delay(10);
     //Việc đầu tiên cần làm là kết nối vào mạng Wifi
     Serial.print("Ket noi vao mang ");
     Serial.println(ssid);
@@ -65,8 +63,6 @@ void setup()
  
 void loop()
 {
-
-   // if(mySerial.isRxEnabled()){
       while(Serial.available()){
         char InChar=Serial.read();
         InString+=InChar;
@@ -74,53 +70,67 @@ void loop()
         {
             Serial.print(InString);
             Serial.print("\r\n");
-            InString="";
-            return;
-        }
- // }
-    }
+          if(InString[0]=='d' )
+           {
+               client.send("right", "message", InString);
+               InString="";
+               
+           }
+        
+          if(InString[0]=='a' )
+          {
+             client.send("left", "message", InString);
+             InString="";
+             
+          }
+      
+          if(InString[0]=='w' )
+          {
+             client.send("down", "message", InString);
+             InString="";
+             
+          }
+          if(InString[0]=='s' )
+          {
+             client.send("up", "message", InString);
+             InString="";
+             
+          }
+          if(InString[0]=='q' )
+          {
+             client.send("ok", "message", "Time please?");
+             InString="";
+             
+          }
+         InString="";
+      }
+  }
+
+   // client.send("right", "message", InString);
     //tạo một task cứ sau "interval" giây thì chạy lệnh:
-    if (millis() - previousMillis > interval) {
-        //lệnh:
-        previousMillis = millis();
- 
-        //gửi sự kiện "atime" là một JSON chứa tham số message có nội dung là Time please?
-        client.send("atime", "message", "Time please?");
-    }
+//    if (millis() - previousMillis > interval) {
+//        //lệnh:
+//        previousMillis = millis();
+// 
+//        //gửi sự kiện "atime" là một JSON chứa tham số message có nội dung là Time please?
+//        client.send("atime", "message", "Time please?");
+//    }
 
-    if(InString[0]=='d' && InString[1]=='\0')
-    {
-       client.send("right", "message", InString);
-       
-    }
 
-    if(InString[0]=='a' && InString[1]=='\0')
-    {
-       client.send("left", "message", InString);
-       
-    }
 
-    if(InString[0]=='w' && InString[1]=='\0')
-    {
-       client.send("down", "message", InString);
-       
-    }
-    if(InString[0]=='s' && InString[1]=='\0')
-    {
-       client.send("up", "message", InString);
-       
-    }
-    if(InString[0]=='q' && InString[1]=='\0')
-    {
-       client.send("ok", "message", "Time please?");
-       
-    }
     //Khi bắt được bất kỳ sự kiện nào thì chúng ta có hai tham số:
     //  +RID: Tên sự kiện
     //  +RFull: Danh sách tham số được nén thành chuỗi JSON!
     if (client.monitor()) {
         Serial.println(RID);
         Serial.println(Rfull);
+    }
+        if (millis() - previousMillis > interval) {
+        //lệnh:
+        previousMillis = millis();
+ 
+        //gửi sự kiện "atime" là một JSON chứa tham số message có nội dung là Time please?
+        client.reconnect(host, port);
     }
  
     //Kết nối lại!

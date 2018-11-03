@@ -113,38 +113,38 @@
 ///* Description:                                                                                            */
 ///*              Set the specified GPIO pin to the specified GPIO operation mode.	                       */
 ///*---------------------------------------------------------------------------------------------------------*/
-//int32_t DrvGPIO_Open(E_DRVGPIO_PORT port, int32_t i32Bit, E_DRVGPIO_IO mode)
-//{
-//    volatile uint32_t u32Reg;
-//    
-//    if ((i32Bit < 0) || (i32Bit > 16))
-//    {
-//        return E_DRVGPIO_ARGUMENT;
-//    }    
+int32_t DrvGPIO_Open(E_DRVGPIO_PORT port, int32_t i32Bit, E_DRVGPIO_IO mode)
+{
+    volatile uint32_t u32Reg;
+    
+    if ((i32Bit < 0) || (i32Bit > 16))
+    {
+        return E_DRVGPIO_ARGUMENT;
+    }    
 
-//    u32Reg = (uint32_t)&GPIOA->PMD + (port*PORT_OFFSET);    
-//    if ((mode == E_IO_INPUT) || (mode == E_IO_OUTPUT) || (mode == E_IO_OPENDRAIN))
-//    {
-//        outpw(u32Reg, inpw(u32Reg) & ~(0x3<<(i32Bit*2)));
-//        if (mode == E_IO_OUTPUT)
-//        {
-//            outpw(u32Reg, inpw(u32Reg) | (0x1<<(i32Bit*2)));
-//        }else
-//        if (mode == E_IO_OPENDRAIN) 
-//        {
-//            outpw(u32Reg, inpw(u32Reg) | (0x2<<(i32Bit*2)));
-//        }
-//    }else
-//	if (mode == E_IO_QUASI)
-//    {
-//        outpw(u32Reg, inpw(u32Reg) | (0x3<<(i32Bit*2)));
-//    }else
-//    {
-//        return E_DRVGPIO_ARGUMENT;
-//    }
-//        
-//	return E_SUCCESS;
-//}
+    u32Reg = (uint32_t)&PA->PMD + (port*PORT_OFFSET);    
+    if ((mode == E_IO_INPUT) || (mode == E_IO_OUTPUT) || (mode == E_IO_OPENDRAIN))
+    {
+        outpw(u32Reg, inpw(u32Reg) & ~(0x3<<(i32Bit*2)));
+        if (mode == E_IO_OUTPUT)
+        {
+            outpw(u32Reg, inpw(u32Reg) | (0x1<<(i32Bit*2)));
+        }else
+        if (mode == E_IO_OPENDRAIN) 
+        {
+            outpw(u32Reg, inpw(u32Reg) | (0x2<<(i32Bit*2)));
+        }
+    }else
+	if (mode == E_IO_QUASI)
+    {
+        outpw(u32Reg, inpw(u32Reg) | (0x3<<(i32Bit*2)));
+    }else
+    {
+        return E_DRVGPIO_ARGUMENT;
+    }
+        
+	return E_SUCCESS;
+}
 
 ///*---------------------------------------------------------------------------------------------------------*/
 ///* Function:    DrvGPIO_Close                                                                              */
@@ -169,7 +169,7 @@
 //        return E_DRVGPIO_ARGUMENT;
 //    }
 //    
-//    u32Reg = (uint32_t)&GPIOA->PMD + (port*PORT_OFFSET);    
+//    u32Reg = (uint32_t)&PA->PMD + (port*PORT_OFFSET);    
 //    outpw(u32Reg, inpw(u32Reg) | (0x3<<(i32Bit*2)));
 //	
 //	GPIO_DBNCECON->DBNCECON.ICLK_ON = 0; 
@@ -1469,6 +1469,23 @@ int32_t DrvGPIO_ClrBit(E_DRVGPIO_PORT port, int32_t i32Bit)
 //   return DRVGPIO_VERSION_NUM;
 //}
 
+
+void OpenKeyPad(void)
+{
+	uint8_t i;
+	/* Initial key pad */
+	for(i=0;i<6;i++)
+	DrvGPIO_Open(E_GPA, i, E_IO_QUASI);
+}
+
+//void CloseKeyPad(void)
+//{
+//	uint8_t i;
+
+//	for(i=0;i<6;i++)
+//	DrvGPIO_Close(E_GPA, i);
+//}
+
 uint8_t Scankey(void)
 {
 	uint8_t act[4]={0x3b, 0x3d, 0x3e};    
@@ -1486,11 +1503,11 @@ uint8_t Scankey(void)
 			temp>>=1;
 		}
 		delay();
-		if(DrvGPIO_GetBit(E_GPA,3)==0)
+		if(DrvGPIO_GetBit(E_GPA,12)==0)
 			return(i+1);
-		if(DrvGPIO_GetBit(E_GPA,4)==0)
+		if(DrvGPIO_GetBit(E_GPA,13)==0)
 			return(i+4);
-		if(DrvGPIO_GetBit(E_GPA,5)==0)
+		if(DrvGPIO_GetBit(E_GPA,14)==0)
 			return(i+7);
 	}
 		return 0;

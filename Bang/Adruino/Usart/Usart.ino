@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 
 String InString= "";
-bool stringComplete = false;  // whether the string is complete
+
 
 void setup() {
   // initialize serial:
@@ -27,17 +27,4 @@ void loop() {
         }
   }
 //}
-}
-
-void ReceiveString(uint8_t leng, char delim) {
-  InString="";
-  while (InString.length() < leng) { //until reach enough length or buff[lastest byte]==delim
-    if (Serial.isRxEnabled()){
-      if(Serial.available()){
-        char InChar=Serial.read();
-        if(InChar==delim) return;
-        InString+=InChar;
-      }
-    }
-  }
 }

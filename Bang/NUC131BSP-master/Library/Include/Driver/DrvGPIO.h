@@ -207,6 +207,8 @@ int32_t DrvGPIO_InitFunction(E_DRVGPIO_FUNC function);
 int32_t DrvGPIO_GetVersion(void);
 void delay(void);
 uint8_t Scankey(void);
+void OpenKeyPad(void);
+void CloseKeyPad(void);
 #endif
 
 

@@ -18813,6 +18813,8 @@ int32_t DrvGPIO_InitFunction(E_DRVGPIO_FUNC function);
 int32_t DrvGPIO_GetVersion(void);
 void delay(void);
 uint8_t Scankey(void);
+void OpenKeyPad(void);
+void CloseKeyPad(void);
 
 
 
@@ -18930,38 +18932,38 @@ uint8_t Scankey(void);
 
 
 
+int32_t DrvGPIO_Open(E_DRVGPIO_PORT port, int32_t i32Bit, E_DRVGPIO_IO mode)
+{
+    volatile uint32_t u32Reg;
+    
+    if ((i32Bit < 0) || (i32Bit > 16))
+    {
+        return (((1) ? 0xFFFF0000 : 0x00000000) | ((((MODULE_ID_DRVGPIO) & 0xFF) | ((1) ? 0x100 : 0x00)) << 7) | ((1) & 0x7F));
+    }    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    u32Reg = (uint32_t)&((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) ))->PMD + (port*0x40);    
+    if ((mode == E_IO_INPUT) || (mode == E_IO_OUTPUT) || (mode == E_IO_OPENDRAIN))
+    {
+        *((volatile unsigned int *)(u32Reg)) = ((*((volatile unsigned int *)(u32Reg))) & ~(0x3<<(i32Bit*2)));
+        if (mode == E_IO_OUTPUT)
+        {
+            *((volatile unsigned int *)(u32Reg)) = ((*((volatile unsigned int *)(u32Reg))) | (0x1<<(i32Bit*2)));
+        }else
+        if (mode == E_IO_OPENDRAIN) 
+        {
+            *((volatile unsigned int *)(u32Reg)) = ((*((volatile unsigned int *)(u32Reg))) | (0x2<<(i32Bit*2)));
+        }
+    }else
+	if (mode == E_IO_QUASI)
+    {
+        *((volatile unsigned int *)(u32Reg)) = ((*((volatile unsigned int *)(u32Reg))) | (0x3<<(i32Bit*2)));
+    }else
+    {
+        return (((1) ? 0xFFFF0000 : 0x00000000) | ((((MODULE_ID_DRVGPIO) & 0xFF) | ((1) ? 0x100 : 0x00)) << 7) | ((1) & 0x7F));
+    }
+        
+	return 0;
+}
 
 
 
@@ -20286,6 +20288,23 @@ int32_t DrvGPIO_ClrBit(E_DRVGPIO_PORT port, int32_t i32Bit)
 
 
 
+
+void OpenKeyPad(void)
+{
+	uint8_t i;
+	 
+	for(i=0;i<6;i++)
+	DrvGPIO_Open(E_GPA, i, E_IO_QUASI);
+}
+
+
+
+
+
+
+
+
+
 uint8_t Scankey(void)
 {
 	uint8_t act[4]={0x3b, 0x3d, 0x3e};    
@@ -20303,11 +20322,11 @@ uint8_t Scankey(void)
 			temp>>=1;
 		}
 		delay();
-		if(DrvGPIO_GetBit(E_GPA,3)==0)
+		if(DrvGPIO_GetBit(E_GPA,12)==0)
 			return(i+1);
-		if(DrvGPIO_GetBit(E_GPA,4)==0)
+		if(DrvGPIO_GetBit(E_GPA,13)==0)
 			return(i+4);
-		if(DrvGPIO_GetBit(E_GPA,5)==0)
+		if(DrvGPIO_GetBit(E_GPA,14)==0)
 			return(i+7);
 	}
 		return 0;

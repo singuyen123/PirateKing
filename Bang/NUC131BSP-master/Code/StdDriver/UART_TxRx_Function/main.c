@@ -32,7 +32,7 @@ volatile int32_t g_bWait         = TRUE;
 int32_t main(void);
 void UART_TEST_HANDLE(void);
 void UART_FunctionTest(void);
-
+void delay_b(uint16_t n);
 
 void SYS_Init(void)
 {
@@ -98,6 +98,7 @@ void UART0_Init()
 void Delay(uint16_t a);
 int main(void)
 {
+	
     /* Unlock protected registers */
     SYS_UnlockReg();
 
@@ -106,47 +107,71 @@ int main(void)
 
     /* Lock protected registers */
     SYS_LockReg();
-
+		printf("sss.");
     /* Init UART0 for printf and testing */
     UART0_Init();
+		OpenKeyPad();
     while(1)
 		{
-			//up
+		  Delay(65);
 			if(Scankey()==2)
 			{
+				
+				while(Scankey()!=2){};
+				delay_b(10);
 				printf("s.");
-			}
+			//	delay_b(10);
+				}
 			//left
 			if(Scankey()==4)
 			{
+				while(Scankey()!=4){};
+				delay_b(10);
 				printf("a.");
 			}
 			//ok
 			if(Scankey()==5)
 			{
+				while(Scankey()!=5){};
+				delay_b(10);
 				printf("q.");
+				
 			}
 			//right
 			if(Scankey()==6)
 			{
+			 while(Scankey()!=6){};
+				delay_b(10);
 				printf("d.");
+			
 			}
 			//down
 			if(Scankey()==8)
 			{
+				while(Scankey()!=8){};
+				delay_b(10);
 				printf("w.");
 			}
 		
-			
+			delay_b(10);
 		}
 
 }
 
 
+void delay_b(uint16_t n)
+{
+	uint16_t i;
+	for(i=0;i<n;i++)
+	{
+			Delay(60);
+	}
+}
+
 void Delay(uint16_t a)
 {
 	uint16_t i=0;
-	for(i=0;i<a*10000;i++)
+	for(i=0;i<a*1000;i++)
 	{
 		
 	}
