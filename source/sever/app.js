@@ -23,7 +23,9 @@ app.post('/submit', function (req, res) {
   checkLoginAccount(username, pass, function (result) {
       if (result) {
           res.redirect('/play');
-      } 
+      }else{
+        res.sendfile('/home/sideptr/workspace/PirateKing/source/html/signin.html')
+      }
   });
 });
 
