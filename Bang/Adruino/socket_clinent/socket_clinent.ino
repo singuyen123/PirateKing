@@ -6,12 +6,15 @@
 SocketIOClient client;
 //const char* ssid = "UIT_Guest";          //name Wifi ma Socket server connecting
 //const char* password = "1denmuoi1";  //Pass wifi 
-const char* ssid      =  "TRUNG TAM KTX";
-const char* password  =  "Nhu mat khau cu.";
+//const char* ssid      =  "TRUNG TAM KTX";
+//const char* password  =  "Nhu mat khau cu.";
+const char* ssid      =  "Hacker";
+const char* password  =  "55555555";
+
 
 String InString= "";
 char host[] = "128.199.225.158";  //address IP service
-int port = 7070;                  //port server create
+int port = 3000;                  //port server create
 
 //từ khóa extern: dùng để #include các biến toàn cục ở một số thư viện khác. Trong thư viện SocketIOClient có hai biến toàn cục
 // mà chúng ta cần quan tâm đó là
