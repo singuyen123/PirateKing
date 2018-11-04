@@ -55,7 +55,7 @@ function ParseJson(jsondata) {
         return null;
     }
 }
- 
+ ///////////////////////////////Chuoi json/////////////////////
 //Gui du lieu thông qua 
 function sendTime() {
 	
@@ -64,11 +64,66 @@ function sendTime() {
 	    status: "bi ban", 	//kieu chuoi
         x     : 12,									//so nguyên
 		y     : 3.14,							    //so thuc
-		time: new Date()							//Ðoi tuong Thoi gian
+		//time: new Date()							//Ðoi tuong Thoi gian
     }
-    io.sockets.emit('atime', json);
+    io.sockets.emit('Bi ban', json);
+}
+
+//Gui du lieu thông qua 
+function moveLeft() {
+	
+	//Ðay la mot chuoi JSON
+	var json = {
+	    status: "Left", 	//kieu chuoi
+         x: 0 ,
+         y:0
+    }
+    io.sockets.emit('Left', json);
 }
  
+//Gui du lieu thông qua 
+function moveRight() {
+	
+	//Ðay la mot chuoi JSON
+	var json = {
+	    status: "Right", 	//kieu chuoi
+         x: 0 ,
+         y:0
+    }
+    io.sockets.emit('Right', json);
+}
+//Gui du lieu thông qua 
+function moveDown() {
+	
+	//Ðay la mot chuoi JSON
+	var json = {
+	    status: "Down", 	//kieu chuoi
+         x:0  ,
+         y:0
+    }
+    io.sockets.emit('Down', json);
+}
+//Gui du lieu thông qua 
+function moveUp() {
+	
+	//Ðay la mot chuoi JSON
+	var json = {
+	    status: "Up", 	//kieu chuoi
+         x:0  ,
+         y:0
+    }
+    io.sockets.emit('Up', json);
+}
+//Gui du lieu thông qua 
+function located() {
+	
+	//Ðay la mot chuoi JSON
+	var json = {
+	    status: "located", 	//kieu chuoi
+    }
+    io.sockets.emit('Up', json);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Khi co mot ket noi duoc tao giua Socket Client và Socket Server
 io.on('connection', function(socket) {	//'connection' (1) nay khac gi voi 'connection' (2)
 	
@@ -92,23 +147,28 @@ io.on('connection', function(socket) {	//'connection' (1) nay khac gi voi 'conne
     });
 
     //when listenned event "right"
-	socket.on('right', function(data) {
+   socket.on('right', function(data) {
+         moveRight();
         console.log(data);
     });
     //when listenned event "left"
-	socket.on('left', function(data) {
+   socket.on('left', function(data) {
+        moveLeft();
         console.log(data);
     });
     //when listenned event "down"
 	socket.on('down', function(data) {
+         moveDown();
         console.log(data);
     });
     //when listenned event "up"
 	socket.on('up', function(data) {
+         moveUp();
         console.log(data);
     });
     //when listenned event "ok"
 	socket.on('ok', function(data) {
+        located();
         console.log(data);
     });
 
@@ -119,6 +179,11 @@ io.on('connection', function(socket) {	//'connection' (1) nay khac gi voi 'conne
     });
 });
 
+  wss.on('connection', function (ws) {
+    ws.on('message', function (message) {
+      console.log('received: %s', message)
+    })
+  })
     app.get('/', function (req, res) {
         res.sendfile('/home/sideptr/workspace/PirateKing/source/html/ws.html');
     });
