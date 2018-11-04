@@ -6,6 +6,14 @@
 </head>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
 
 <body>
   <script>
@@ -29,20 +37,43 @@
     function btn_login() {
       var username = document.getElementById("username").value;
       var pass = document.getElementById("pass").value;
-      var temp1 = '{"stt":"login","username":"' + usrname + '","pass":"' + pass + '"}'
-      
-      alert(temp);
-      ws.send(temp);
+      var temp1 = '{"stt":"login","username":"'// + usrname + '","pass":"' + pass + '"}'
+      var temp2 = '","pass":"'
+      var temp3 = '"}'
+      ws.send(temp1 + username + temp2 + pass + temp3);
     }
     function btn_signup() {
-      var username = document.getElementById("signup_username").value;
+      var username = document.getElementById("signup_user").value;
       var pass = document.getElementById("signup_pass").value;
       var email = document.getElementById("signup_email").value;
-      var temp = '{"stt":"signup","username":"' + usrname + '","pass":"' + pass + '", "email" = "' + email + '"}';
-      ws.send(temp);
+      var temp1 = '{"stt":"signup","username":"'// + usrname + '","pass":"' + pass + '"}'
+      var temp2 = '","pass":"'
+      var temp3 = '"}'
+      var temp4 = '", "email" : "'
+      ws.send(temp1 + username + temp2 + pass + temp4 + email + temp3);
     }
   </script>
-
+  <div class="login-page">
+    <div class="form">
+      <form class="register-form">
+        <input type="text" placeholder="name" id="signup_user" name="signup_user" />
+        <input type="password" placeholder="password" id="signup_pass" name="signup_pass" />
+        <input type="text" placeholder="email address" id="signup_email" name="signup_email" />
+        <button onclick="btn_signup()">create</button>
+        <p class="message">Already registered?
+          <a>Sign In</a>
+        </p>
+      </form>
+      <form action="/submit" method="post" class="login-form">
+        <input type="text" placeholder="username" id="username" name="username" />
+        <input type="password" placeholder="password" id="pass" name="pass" />
+        <button onclick="btn_login()" type = "login">login</button>
+        <p class="message">Not registered?
+          <a href="#">Create an account</a>
+        </p>
+      </form>
+    </div>
+  </div>
 </body>
 
 <style>
@@ -166,26 +197,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
 </style>
-<div class="login-page">
-  <div class="form">
-    <form class="register-form">
-      <input type="text" placeholder="name" id="signup_user" />
-      <input type="password" placeholder="password" id="signup_pass" />
-      <input type="text" placeholder="email address" id="signup_email" />
-      <button onclick="btn_signup()">create</button>
-      <p class="message">Already registered?
-        <a>Sign In</a>
-      </p>
-    </form>
-    <form class="login-form">
-      <input type="text" placeholder="username" id="username" />
-      <input type="password" placeholder="password" id="pass" />
-      <button onclick="btn_login()">login</button>
-      <p class="message">Not registered?
-        <a href="#">Create an account</a>
-      </p>
-    </form>
-  </div>
-</div>
+
 
 </html>
