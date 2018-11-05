@@ -17,6 +17,7 @@
 
 <body>
   <script>
+    alert("Sorry, unrecognized username or password.")
     var ws = new WebSocket('ws://localhost:80');
     ws.onopen = function () {
       //console.log('websocket is connected ...')
