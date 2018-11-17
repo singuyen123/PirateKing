@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="pickroom.css">
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
+
+<body>
+    <script>
+        function checkDevice() {
+            var device = document.forms[0];
+            var txt = "";
+            var i;
+            for (i = 0; i < device.length; i++) {
+                if (device[i].checked) {
+                    txt = txt + device[i].value + " ";
+                    var temp1 = '{"stt":"createRoom","device":"'
+                    var temp2 = '"}'
+                    //ws.send(temp1+txt+temp2);
+                    //alert(temp1 + txt + temp2);
+                }
+            }
+        }
+    </script>
+    <div class="pickroom-page">
+        <div class="form">
+            <form class="pickroom-form">
+                <input type="radio" name="gender" value="device1" checked="checked" id=""> device1</input>
+                <br>
+                <input type="radio" name="gender" value="device2" disabled="disabled"> device2</input>
+                <br>
+                <input type="radio" name="gender" value="device3"> device3</input>
+                <br>
+                <button onclick="checkDevice()">Reate Room</button>
+                <button>Quick join</button>
+        </div>
+    </div>
+</body>
