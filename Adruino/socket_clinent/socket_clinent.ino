@@ -6,12 +6,13 @@
 SocketIOClient client;
 //const char* ssid = "UIT_Guest";          //name Wifi ma Socket server connecting
 //const char* password = "1denmuoi1";  //Pass wifi 
-const char* ssid      =  "TRUNG TAM KTX";
-const char* password  =  "Nhu mat khau cu.";
+const char* ssid      =  "1";
+const char* password  =  "12345678";
 
 String InString= "";
-char host[] = "128.199.225.158";  //address IP service
-int port = 7070;                  //port server create
+char host[] = "192.168.43.226";  //address IP service
+int port = 3000;                  //port server create
+String device = "device1";
 
 //từ khóa extern: dùng để #include các biến toàn cục ở một số thư viện khác. Trong thư viện SocketIOClient có hai biến toàn cục
 // mà chúng ta cần quan tâm đó là
@@ -57,54 +58,24 @@ void setup()
     if (client.connected()) {
         //Thì gửi sự kiện ("connection") đến Socket server ahihi.
         Serial.print("Ket noi den socket server thanh cong");
-        client.send("connection", "message", "Connected !!!!");
+        client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
     }
 }
  
 void loop()
 {
-      while(Serial.available()){
-        char InChar=Serial.read();
-        InString+=InChar;
-        if(InChar == '.') 
-        {
-            Serial.print(InString);
-            Serial.print("\r\n");
-          if(InString[0]=='d' )
-           {
-               client.send("right", "message", InString);
-               InString="";
-               
-           }
-        
-          if(InString[0]=='a' )
-          {
-             client.send("left", "message", InString);
-             InString="";
-             
-          }
-      
-          if(InString[0]=='w' )
-          {
-             client.send("down", "message", InString);
-             InString="";
-             
-          }
-          if(InString[0]=='s' )
-          {
-             client.send("up", "message", InString);
-             InString="";
-             
-          }
-          if(InString[0]=='q' )
-          {
-             client.send("ok", "message", "Time please?");
-             InString="";
-             
-          }
-         InString="";
-      }
-  }
+//      while(Serial.available()){
+//        char InChar=Serial.read();
+//        InString+=InChar;
+//        if(InChar == '.') 
+//        {
+//            Serial.print(InString);
+//            Serial.print("\r\n");
+//            client.send("message","");
+//      }
+
+//    client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
+      delay(10000);
 
    // client.send("right", "message", InString);
     //tạo một task cứ sau "interval" giây thì chạy lệnh:
@@ -121,20 +92,20 @@ void loop()
     //Khi bắt được bất kỳ sự kiện nào thì chúng ta có hai tham số:
     //  +RID: Tên sự kiện
     //  +RFull: Danh sách tham số được nén thành chuỗi JSON!
-    if (client.monitor()) {
-        Serial.println(RID);
-        Serial.println(Rfull);
-    }
-        if (millis() - previousMillis > interval) {
-        //lệnh:
-        previousMillis = millis();
- 
-        //gửi sự kiện "atime" là một JSON chứa tham số message có nội dung là Time please?
-        client.reconnect(host, port);
-    }
- 
-    //Kết nối lại!
-    if (!client.connected()) {
-      client.reconnect(host, port);
-    }
+//    if (client.monitor()) {
+//        Serial.println(RID);
+//        Serial.println(Rfull);
+//    }
+//        if (millis() - previousMillis > interval) {
+//        //lệnh:
+//        previousMillis = millis();
+// 
+//        //gửi sự kiện "atime" là một JSON chứa tham số message có nội dung là Time please?
+//        client.reconnect(host, port);
+//    }
+// 
+//    //Kết nối lại!
+//    if (!client.connected()) {
+//      client.reconnect(host, port);
+//    }
 }

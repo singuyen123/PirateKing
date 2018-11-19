@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/public/css/pickroom.css">
+   
+</head>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="/public/js/pickroom.js"></script>
+
+
+<body>
+    <div class="pickroom-page">
+        <div class="form">
+            <form class="pickroom-form">
+                <p class="message" id="message"></p>
+                    <a href="#" id></a>
+                </p>
+                <input type="radio" name="gender" value="device1" id="device1" disabled="disabled"> device1</input>
+                <br>
+                <input type="radio" name="gender" value="device2" id="device2" disabled="disabled"> device2</input>
+                <br>
+                <input type="radio" name="gender" value="device3" id="device3" disabled="disabled"> device3</input>
+                <br>
+                <button onclick="createRoom()" type="button" id="btn_create">Reate Room</button>
+                <button onclick="quickJoin()" type="button" id="btn_quickjoin">Quick join</button>
+        </div>
+    </div>
+</body>
+
+</html>
