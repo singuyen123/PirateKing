@@ -2,6 +2,24 @@ var socket = io()
 var userInfo = {}
 socket.on('connect', () => {
     socket.emit('type', 'pickroom');
+    socket.on('device-info', function (message) {
+        console.log(message)
+        if (message[0]){
+            document.getElementById("device1").disabled = false;
+            document.getElementById("device1").checked = false;
+        }
+        else{ 
+            document.getElementById("device1").disabled = true;
+            document.getElementById("device1").checked = false;
+        }
+        if (message[1]){
+            document.getElementById("device2").disabled = false;
+            document.getElementById("device1").checked = false;
+        }else {
+            document.getElementById("device2").disabled = true;
+            document.getElementById("device1").checked = false;
+        }
+    })
     var username = getCookie('username');
     var seasionKey = getCookie('seasion');
     socket.emit('seasion-info', {
@@ -12,33 +30,36 @@ socket.on('connect', () => {
         if (data.seasionStatus) {
             userInfo = data.userInfo;
         } else {
-
             window.location.href = window.location.protocol + '//' + window.location.host;
         }
     })
-
-    socket.on('connection', function (message) {
-        switch (message) {
-            case 'device1':
-                document.getElementById("device1").disabled = false;
-                break;
-            case 'device2':
-                document.getElementById("device2").disabled = false;
-                break;
-            case 'device3':
-                document.getElementById("device3").disabled = false;
-                break;
+    socket.on('request-pickRoom',function(message){
+        var txt = document.getElementById('message')
+        if(message)
+        window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
+        else {
+            txt.textContent = "Please choice device";
+            txt.style.visibility = "visible";
         }
+    })
+    socket.on('request-quickJoin',function(message){
+        var txt = document.getElementById('message')
+        if(message)
+        window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
+        else {
+            txt.textContent = "Please choice device";
+            txt.style.visibility = "visible";
+        }
+    })
 
-    });
 })
 function createRoom() {
     document.cookie = 'device=' + getDevice() + ';';
-    window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
+    socket.emit('create-room', getDevice());
 }
 function quickJoin() {
     document.cookie = 'device=' + getDevice() + ';';
-    window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
+    socket.emit('quick-join', getDevice());
 }
 
 function getDevice() {

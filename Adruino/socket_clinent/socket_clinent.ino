@@ -58,7 +58,8 @@ void setup()
     if (client.connected()) {
         //Thì gửi sự kiện ("connection") đến Socket server ahihi.
         Serial.print("Ket noi den socket server thanh cong");
-        client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
+        client.send("device-connection","{\"device\":\"device1\"}");
+        
     }
 }
  
@@ -74,7 +75,7 @@ void loop()
 //            client.send("message","");
 //      }
 
-//    client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
+   client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
       delay(10000);
 
    // client.send("right", "message", InString);

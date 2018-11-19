@@ -70,6 +70,8 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                 });
                 break;
             case 'pickroom':
+                socket.emit('device-info', device)
+                console.log(device);
                 socket.on('seasion-info', function (message) {
                     MongoClient.connect(mongodbUrl, function (err, db) {
                         assert.equal(null, err);
@@ -89,21 +91,36 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                         });
                     });
                 })
-                // socket.on('create-room', function (message) {
-                //     room.player1 = message;
-                //     room.numMembers = 1;
-
-                // })
-                // socket.on('quick-join', function (message) {
-                //     if (room.numMembers == 1) {
-                //         room.numMembers++;
-                //         room.player2 = message;
-                //     } else if (room[i].numMembers == null) {
-                //         room.numMembers++;
-                //         room.player1 = message;
-                //     }
-
-                // })
+                socket.on('create-room', function (message) {
+                    switch (message) {
+                        case 'device1':
+                            socket.emit('request-pickRoom', true)
+                            device[0] = false;
+                            break;
+                        case 'device2':
+                            socket.emit('request-pickRoom', true)
+                            device[1] = false;
+                            break;
+                        default:
+                            socket.emit('request-pickRoom', false)
+                            break;
+                    }
+                })
+                socket.on('quick-join', function (message) {
+                    switch (message) {
+                        case 'device1':
+                            socket.emit('request-quickJoin', true)
+                            device[0] = false;
+                            break;
+                        case 'device2':
+                            socket.emit('request-quickJoin', true)
+                            device[1] = false;
+                            break;
+                        default:
+                            socket.emit('request-quickJoin', false)
+                            break;
+                    }
+                })
                 socket.emit('connection', 'device1');
                 break;
             case 'player1':
@@ -128,7 +145,6 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
 
                         });
                     });
-                    socket.emit('test', message);
                 })
 
                 break;
@@ -154,30 +170,27 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                         });
                     });
                 })
-
-                socket.emit('test', room);
-                break;
-            case 'device':
-                console.log('1');
-                socket.on('data',function(message){
-                    console.log(message);
-                })
-                socket.on('control',function(message){
-                    console.log(message);
-                    //socket.broadcast.emit('',message);
-                })
                 break;
         }
     })
     //Gui di lenh 'welcome' voi mot tham so la mot bien JSON. Trong bien JSON nay co mot tham so va tham so do ten la message. Kieu du lieu cua tham so l� mot chuoi.
-    socket.emit('welcome', {
-        message: 'Connected !!!!'
+    socket.on('device-connection', function (message) {
+        switch (message.device) {
+            case 'device1':
+                device[0] = true;
+                break;
+            case 'device2':
+                device[1] = true;
+                break;
+        }
+        console.log(message);
     });
 
     //Khi lang nghe duoc lenh "connection" voi mot tham so, va chung ta dat ten tham so la message.
     //'connection' (2)
     socket.on('control', function (message) {
-        socket.broadcast.emit('control-index',message)
+        console.log('1');
+        socket.broadcast.emit('control-index', message)
     });
 
 

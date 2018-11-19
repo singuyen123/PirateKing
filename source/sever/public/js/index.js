@@ -21,12 +21,10 @@ socket.on('connect', () => {
             window.location.href = window.location.protocol + '//' + window.location.host;
         }
 	})
-	socket.on('test',function(msg){
-		console.log(msg);
-	})
 })
 socket.on('control-index',function(message){
 	if(message.device==='device1'){
+		message.user=getCookie('username');
 		console.log(message);
 	}
 })
