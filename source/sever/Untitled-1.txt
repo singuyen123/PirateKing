@@ -1,0 +1,50 @@
+ // var i=0,j=0;
+  // function moveShip(i,j) {
+  // var c = document.getElementById("canvasTop");
+  // var ctx = c.getContext("2d");
+  // ctx.fillStyle = "#008B8B";
+  // ctx.border ="1px";
+  // ctx.border.solid ="#000000";
+  //     ctx.fillRect(i,j,28.5,28.5);
+  // }
+
+  //  socket.on('move_ship', function (msg) {
+  //      switch(msg){
+  //       case 'Left': 
+  //         moveShip(i-29,j);
+  //         break;
+  //       case 'Right':
+  //         moveShip(i+29,j);
+  //         break;
+  //       case 'down':
+  //         moveShip(i,j-29);
+  //         break;
+  //       case 'up': 
+  //         moveShip(i,j+29);
+  //         break;
+  //       case 'Dat_thuyen':
+  //         console.log(i,j);
+  //       break;
+  //      }
+  //  }); 
+
+
+  //    socket.on('move', function (msg) {
+//        switch(msg){
+//            case 'Left': 
+//             socket.broadcast.emit ('move_ship',msg);
+//             break;
+//            case 'Right':
+//             socket.broadcast.emit ("move_ship",msg);
+//             break;
+//            case 'down':
+//             socket.broadcast.emit ("move_ship",msg);
+//             break;
+//            case 'up': 
+//             socket.broadcast.emit ("move_ship",msg);
+//             break;
+//            case 'Dat_thuyen':
+//             socket.broadcast.emit ("move_ship",msg);
+//             break;
+//        }
+//    }); 

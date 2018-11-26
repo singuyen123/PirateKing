@@ -514,7 +514,7 @@ $(document).ready(function() {
 		if (i < 11) {
 			$(".top").prepend("<span class='aTops'>" + Math.abs(i - 11) + "</span>");
 			$(".bottom").prepend("<span class='aTops'>" + Math.abs(i - 11) + "</span>");
-			$(".grid").append("<li class='points offset1 " + i + "'><span class='hole'></span></li>");
+		//	$(".grid").append("<li class='points offset1 " + i + "'><span class='hole'></span></li>");
 		} else {
 			$(".grid").append("<li class='points offset2 " + i + "'><span class='hole'></span></li>");
 		}
