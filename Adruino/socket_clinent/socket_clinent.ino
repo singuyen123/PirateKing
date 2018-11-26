@@ -17,14 +17,6 @@ String device = "device1";
 //const char* ssid      =  "TRUNG TAM KTX";
 //const char* password  =  "Nhu mat khau cu.";
 
-const char* ssid = "1";          //name Wifi ma Socket server connecting
-const char* password = "12345678";  //Pass wifi 
-
-String InString= "";
-char host[] = "128.199.225.158";  //address IP service
-int port = 3000;                  //port server create
->>>>>>> Stashed changes
-
 //từ khóa extern: dùng để #include các biến toàn cục ở một số thư viện khác. Trong thư viện SocketIOClient có hai biến toàn cục
 // mà chúng ta cần quan tâm đó là
 // RID: Tên hàm (tên sự kiện
@@ -76,44 +68,9 @@ void setup()
  
 void loop()
 {
-//      while(Serial.available()){
-//        char InChar=Serial.read();
-//        InString+=InChar;
-//        if(InChar == '.') 
-//        {
-//            Serial.print(InString);
-//            Serial.print("\r\n");
-//            client.send("message","");
-//      }
-
-     client.send("control","{\"device\":\"device1\",\"action\":\"left\"}");
-     delay(10000);
-     client.send("move","Right");
-      delay(10000);
-      client.send("move","Right");
-      delay(10000);
-      client.send("move","Right");
-      delay(10000);
-      client.send("move","Right");
-      delay(10000);
-      client.send("move","Left");
-      delay(10000);
-      client.send("move","Left");
-      delay(10000);
-      client.send("move","up");
-      delay(10000);
-      client.send("move","up");
-      delay(10000);
-      client.send("move","up");
-      delay(10000);
-      client.send("move","down");
-      delay(10000);
-      client.send("move","down");
-      delay(10000);
-      client.send("move","down");
-      delay(10000);
       while(Serial.available()){
         char InChar=Serial.read();
+        delay(100);
         InString+=InChar;
         if(InChar == '.') 
         {
@@ -121,40 +78,52 @@ void loop()
             Serial.print("\r\n");
           if(InString[0]=='d' )
            {
-               client.send("right", "message ", InString);
+               client.send("move", "{\"id\":\"1\",\"action\":\"Right\"}");
                InString="";
-               
            }
         
           if(InString[0]=='a' )
           {
-             client.send("left", "message", InString);
+             client.send("move", "{\"id\":\"1\",\"action\":\"Left\"}");
              InString="";
              
           }
       
           if(InString[0]=='w' )
           {
-             client.send("down", "message", InString);
+             client.send("move", "{\"id\":\"1\",\"action\":\"Down\"}");
+             InString="";
+             
+          }
+          if(InString[0]=='x' )
+          {
+             client.send("move", "{\"id\":\"1\",\"action\":\"Up\"}");
              InString="";
              
           }
           if(InString[0]=='s' )
           {
-             client.send("up", "message", InString);
+             client.send("move", "{\"id\":\"1\",\"action\":\"Hit\"}");
              InString="";
              
           }
           if(InString[0]=='q' )
           {
-             client.send("ok", "message", "Time please?");
+             client.send("move", "{\"id\":\"1\",\"action\":\"Drop_horizontal\"}");
              InString="";
              
           }
+          if(InString[0]=='z' )
+          {
+             client.send("move", "{\"id\":\"1\",\"action\":\"Drop_vertical\"}");
+             InString="";
+             
+          }
+
          InString="";
       }
   }
->>>>>>> Stashed changes
+
 
    // client.send("right", "message", InString);
     //tạo một task cứ sau "interval" giây thì chạy lệnh:
