@@ -33,7 +33,8 @@ socket.on('connect', () => {
             window.location.href = window.location.protocol + '//' + window.location.host;
         }
     })
-    socket.on('request-pickRoom',function(message){
+    socket.on('request-pickRoom',function(message,roomId){
+        document.cookie = 'room=' + roomId + ';';
         var txt = document.getElementById('message')
         if(message)
         window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
@@ -42,7 +43,8 @@ socket.on('connect', () => {
             txt.style.visibility = "visible";
         }
     })
-    socket.on('request-quickJoin',function(message){
+    socket.on('request-quickJoin',function(message,roomId){
+        document.cookie = 'room=' + roomId + ';';
         var txt = document.getElementById('message')
         if(message)
         window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';

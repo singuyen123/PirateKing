@@ -70,7 +70,6 @@ void loop()
 {
       while(Serial.available()){
         char InChar=Serial.read();
-        delay(100);
         InString+=InChar;
         if(InChar == '.') 
         {
@@ -121,6 +120,9 @@ void loop()
           }
 
          InString="";
+      }
+       if (!client.connected()) {
+        client.reconnect(host, port);
       }
   }
 
