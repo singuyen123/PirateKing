@@ -13,7 +13,8 @@
 </head>
 
 <body>
-    <p id='turn' align="middle"></p> 
+  <p id='turn' align="middle"></p>
+  <p id='demo' align="middle"></p>
   <div id="main">
     <div class="board">
       <div class="displays">
@@ -79,6 +80,8 @@
     var status = 0;
     var status2 = 0;
     var i = 0, j = 0;
+    var hit = 0
+      ;
     var location_ship_player1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -89,9 +92,34 @@
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],];
-    var location_ship_player2 = [[]];
+    var location_ship_player2 =  [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],];
     var id = getCookie('device');
     var room = getCookie('room');
+    var d = 20;
+    var turn;
+    var myVar ;
+    function myTimer() {
+      d = d - 1
+      if (d == 0) { socket.emit("toggle", turn) }
+      if (id == 'device2' && turn == 1) {
+        document.getElementById("demo").innerHTML = d;
+      } else if (id == 'device1' && turn == 0) {
+        document.getElementById("demo").innerHTML = d;
+      } else if (id == 'device2' && turn == 0) {
+        document.getElementById("demo").innerHTML = "";
+      } else if (id == 'device1' && turn == 1) {
+        document.getElementById("demo").innerHTML = "";
+      }
+    }
     socket.on('recive_map_1', function (message) {
       if (id == 'device2')
         location_ship_player2 = message;
@@ -101,32 +129,83 @@
       if (id == 'device1')
         location_ship_player2 = message;
     })
-
-    socket.on('turn',function(msg,msg1){
-      console.log('turn: ' + msg)
-      if(msg1>=2){
-      if(id=='device1' && msg == 0){
-        document.getElementById('turn').innerHTML='YOUR TURN'
-      }else if(id=='device1' && msg == 1){
-        document.getElementById('turn').innerHTML='PLEASE WAIT'
-      }else if(id=='device2' && msg == 0){
-        document.getElementById('turn').innerHTML='PLEASE WAIT'
-      }else if(id=='device2' && msg == 1){
-        document.getElementById('turn').innerHTML='YOUR TURN'
-      }
-    }else {document.getElementById('turn').innerHTML='PLEASE WAIT'}
+    socket.on('lose', function (msg) {
+      clearInterval(myVar);
+      alert('you lose');
+      Restart();
     })
+    socket.on('turn', function (msg, msg1) {
+      console.log('turn: ' + msg)
+      if (msg1 >= 2) {
+        turn = msg;
+        if (id == 'device1' && msg == 0) {
+          document.getElementById('turn').innerHTML = 'YOUR TURN'
+          d = 20;
+          myVar = setInterval(myTimer, 1000);
+        } else if (id == 'device1' && msg == 1) {
+          document.getElementById('turn').innerHTML = 'PLEASE WAIT'
+          clearInterval(myVar);
+          document.getElementById("demo").innerHTML = "";
+        } else if (id == 'device2' && msg == 0) {
+          document.getElementById('turn').innerHTML = 'PLEASE WAIT'
+          clearInterval(myVar);
+          document.getElementById("demo").innerHTML = "";
+        } else if (id == 'device2' && msg == 1) {
+          d = 20;
+          document.getElementById('turn').innerHTML = 'YOUR TURN'
+          myVar = setInterval(myTimer, 1000);
+        }
+      } else { document.getElementById('turn').innerHTML = 'PLEASE WAIT' }
+    })
+
+    function Restart() {
+      clearInterval(myVar);
+      status = 0;
+      status2 = 0;
+      remove_hit_Ship(i, j);
+      i = 0, j = 0;
+      hit = 0;
+      var c = document.getElementById("canvasBottom");
+      var ctx = c.getContext("2d");
+      var c1 = document.getElementById("canvasTop");
+      var ctx1 = c1.getContext("2d");
+      for (var x = 0; x < 290; x=x+29) {
+        for (var y = 0; y < 290; y=y+29) {
+          ctx1.fillStyle = "#FF0000";
+          ctx1.border = "1px";
+          ctx1.border.solid = "#000000";
+          ctx1.fillRect(x, y, 28.5, 28.5);
+
+          ctx.fillStyle = "#FF0000";
+          ctx.border = "1px";
+          ctx.border.solid = "#000000";
+          ctx.fillRect(x, y, 28.5, 28.5);
+        }
+      }
+      location_ship_player1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],];
+      location_ship_player2 = [[]];
+      moveShip(i, j);
+    }
     function getCookie(name) {
-    var nameEQ = name + "=";
-    //alert(document.cookie);
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
+      var nameEQ = name + "=";
+      //alert(document.cookie);
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') c = c.substring(1);
         if (c.indexOf(nameEQ) != -1) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
     }
-    return null;
-}
     //di chuyen con tro dat thuyen
     function moveShip(i, j) {
       var c = document.getElementById("canvasBottom");
@@ -154,13 +233,21 @@
         ctx.border = "1px";
         ctx.border.solid = "#000000";
         ctx.fillRect(i, j, 28.5, 28.5);
-        location_ship_player2[j/29][i/29]=2;
+        location_ship_player2[j / 29][i / 29] = 2;
+        hit = hit + 1;
+        console.log(hit);
+        if (hit >= 12) {
+          console.log('end game')
+          socket.emit('end_game', id);
+          Restart();
+          alert('you win');
+        }
       } else {
         ctx.fillStyle = "#FFFFCC";
         ctx.border = "1px";
         ctx.border.solid = "#000000";
         ctx.fillRect(i, j, 28.5, 28.5);
-        location_ship_player2[j/29][i/29]=3;
+        location_ship_player2[j / 29][i / 29] = 3;
       }
     }
 
@@ -201,17 +288,17 @@
         ctx.border = "1px";
         ctx.border.solid = "#000000";
         ctx.fillRect(i, j, 28.5, 28.5);
-      }else if(location_ship_player2[j / 29][i / 29] == 3 ? 1 : 0){
+      } else if (location_ship_player2[j / 29][i / 29] == 3 ? 1 : 0) {
         ctx.fillStyle = "#FFFFCC";
         ctx.border = "1px";
         ctx.border.solid = "#000000";
         ctx.fillRect(i, j, 28.5, 28.5);
-      }else{
-      
-      ctx.fillStyle = "#FF0000";
-      ctx.border = "1px";
-      ctx.border.solid = "#000000";
-      ctx.fillRect(i, j, 28.5, 28.5);
+      } else {
+
+        ctx.fillStyle = "#FF0000";
+        ctx.border = "1px";
+        ctx.border.solid = "#000000";
+        ctx.fillRect(i, j, 28.5, 28.5);
       }
     }
 
@@ -254,156 +341,155 @@
     /*--------------------ket thuc dat thuyen---------------------------*/
     //danh thuyen nen vi tri di chuyen danh trung vs vi tri luu tru thuyen
 
-    socket.on('hit',function(message){
+    socket.on('hit', function (message) {
       console.log(message)
-      if(message.id==id){
-        hitShip(i,j,message.hit);
+      if (message.id == id) {
+        hitShip(i, j, message.hit);
       }
     })
     //con tro dat thuyen
     socket.on('move_ship', function (msg) {
       console.log(msg)
-      msg.id = 'device'+msg.id;
-      if(msg.id==id){
-      switch (msg.action) {
-        case 'Left':
-          if (status == 4) {
-            if (i == 0)
-              move_hit_Ship(i, j);
-            else {
-              remove_hit_Ship(i, j)
-              i = i - 29;
-              move_hit_Ship(i, j);
+      msg.id = 'device' + msg.id;
+      if (msg.id == id) {
+        switch (msg.action) {
+          case 'Left':
+            if (status == 4) {
+              if (i == 0)
+                move_hit_Ship(i, j);
+              else {
+                remove_hit_Ship(i, j)
+                i = i - 29;
+                move_hit_Ship(i, j);
+              }
+            } else {
+              if (i == 0)
+                moveShip(i, j);
+              else {
+                removeShip(i, j)
+                i = i - 29;
+                moveShip(i, j);
+              }
             }
-          } else {
-            if (i == 0)
-              moveShip(i, j);
-            else {
-              removeShip(i, j)
-              i = i - 29;
-              moveShip(i, j);
-            }
-          }
-          break;
-        case 'Right':
-          if (status == 4) {
-            if (i == 261)
-              move_hit_Ship(i, j);
-            else {
-              remove_hit_Ship(i, j);
-              i = i + 29;
-              move_hit_Ship(i, j);
-              //console.log("value"+i+j);
-            }
-          } else {
-
-            if (i == 261)
-              moveShip(i, j);
-            else {
-              removeShip(i, j)
-              i = i + 29;
-              moveShip(i, j);
-              //console.log("value"+i+j);
-            }
-          }
-
-          break;
-        case 'Down':
-          if (status == 4) {
-            if (j == 0)
-              move_hit_Ship(i, j);
-            else {
-              remove_hit_Ship(i, j);
-              j = j - 29;
-              move_hit_Ship(i, j);
-            }
-          } else {
-            if (j == 0)
-              moveShip(i, j);
-            else {
-              removeShip(i, j)
-              j = j - 29;
-              moveShip(i, j);
-            }
-          }
-          break;
-        case 'Up':
-          if (status == 4) {
-            if (j == 261)
-              move_hit_Ship(i, j);
-            else {
-              remove_hit_Ship(i, j);
-              j = j + 29;
-              move_hit_Ship(i, j);
-            }
-          } else {
-            if (j == 261)
-              moveShip(i, j);
-            else {
-              removeShip(i, j)
-              j = j + 29;
-              moveShip(i, j);
-            }
-          }
-          break;
-        case 'Drop_horizontal':
-          if (status == 0) {
-            setShip(i / 29, j / 29, 4, 1);
-          } else if (status == 1) {
-            setShip(i / 29, j / 29, 3, 1);
-          } else if (status == 2) {
-            setShip(i / 29, j / 29, 3, 1);
-          } else if (status == 3) {
-            setShip(i / 29, j / 29, 2, 1);
-          } else if (status == 4) {
-            move_hit_Ship(0, 0);
-          }
-          if (status == 4) {
-            move_hit_Ship(0, 0);
-            i = 0, j = 0;
-            if (id == "device1"){
-              socket.emit('info_map_1', location_ship_player1, room);
-              console.log(location_ship_player1);
-            }
-            else{ socket.emit('info_map_2', location_ship_player1, room);
-            console.log(location_ship_player2);
-          }
-          }
-          break;
-        case 'Drop_vertical':
-          if (status == 0) {
-            setShip(i / 29, j / 29, 4, 0);
-          } else if (status == 1) {
-            setShip(i / 29, j / 29, 3, 0);
-          } else if (status == 2) {
-            setShip(i / 29, j / 29, 3, 0);
-          } else if (status == 3) {
-            setShip(i / 29, j / 29, 2, 0);
-          }
-          if (status == 4) {
-            move_hit_Ship(0, 0);
-            i = 0, j = 0;
-            if (id == "device1"){
-              socket.emit('info_map_1', location_ship_player1, room);
-              console.log(location_ship_player1);
-            }
-            else{ socket.emit('info_map_2', location_ship_player1, room);
-            console.log(location_ship_player2);
-          }
-          }
-          break;
-        case 'Hit':
-          if (status == 4) {
-            var message={};
-            message.id = id;
-            message.i = i / 29;
-            message.j = j / 29;
-            socket.emit('location_hit', message)
             break;
-          }
+          case 'Right':
+            if (status == 4) {
+              if (i == 261)
+                move_hit_Ship(i, j);
+              else {
+                remove_hit_Ship(i, j);
+                i = i + 29;
+                move_hit_Ship(i, j);
+                //console.log("value"+i+j);
+              }
+            } else {
+
+              if (i == 261)
+                moveShip(i, j);
+              else {
+                removeShip(i, j)
+                i = i + 29;
+                moveShip(i, j);
+                //console.log("value"+i+j);
+              }
+            }
+
+            break;
+          case 'Down':
+            if (status == 4) {
+              if (j == 0)
+                move_hit_Ship(i, j);
+              else {
+                remove_hit_Ship(i, j);
+                j = j - 29;
+                move_hit_Ship(i, j);
+              }
+            } else {
+              if (j == 0)
+                moveShip(i, j);
+              else {
+                removeShip(i, j)
+                j = j - 29;
+                moveShip(i, j);
+              }
+            }
+            break;
+          case 'Up':
+            if (status == 4) {
+              if (j == 261)
+                move_hit_Ship(i, j);
+              else {
+                remove_hit_Ship(i, j);
+                j = j + 29;
+                move_hit_Ship(i, j);
+              }
+            } else {
+              if (j == 261)
+                moveShip(i, j);
+              else {
+                removeShip(i, j)
+                j = j + 29;
+                moveShip(i, j);
+              }
+            }
+            break;
+          case 'Drop_horizontal':
+            if (status == 0) {
+              setShip(i / 29, j / 29, 4, 1);
+            } else if (status == 1) {
+              setShip(i / 29, j / 29, 3, 1);
+            } else if (status == 2) {
+              setShip(i / 29, j / 29, 3, 1);
+            } else if (status == 3) {
+              setShip(i / 29, j / 29, 2, 1);
+              move_hit_Ship(0, 0);
+              i = 0, j = 0;
+              if (id == "device1") {
+                socket.emit('info_map_1', location_ship_player1, room);
+                console.log(location_ship_player1);
+              }
+              else {
+                socket.emit('info_map_2', location_ship_player1, room);
+                console.log(location_ship_player2);
+              }
+            } 
+            
+            break;
+          case 'Drop_vertical':
+            if (status == 0) {
+              setShip(i / 29, j / 29, 4, 0);
+            } else if (status == 1) {
+              setShip(i / 29, j / 29, 3, 0);
+            } else if (status == 2) {
+              setShip(i / 29, j / 29, 3, 0);
+            } else if (status == 3) {
+              setShip(i / 29, j / 29, 2, 0);
+              move_hit_Ship(0, 0);
+              i = 0, j = 0;
+              if (id == "device1") {
+                socket.emit('info_map_1', location_ship_player1, room);
+                console.log(location_ship_player1);
+              }
+              else {
+                socket.emit('info_map_2', location_ship_player1, room);
+                console.log(location_ship_player2);
+              }
+            }
+          
+            break;
+          case 'Hit':
+          console.log(status);
+            if (status >= 4) {
+              var message = {};
+              message.id = id;
+              message.i = i / 29;
+              message.j = j / 29;
+              socket.emit('location_hit', message)
+              break;
+            }
+        }
+        console.log(i + ' ' + j);
       }
-      console.log(i + ' ' + j);
-    }
     });
 
   </script>

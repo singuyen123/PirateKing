@@ -128,7 +128,7 @@ void loop()
 
       }
        if (!client.connected()) {
-        client.reconnect(host, port);
+        client.connect(host, port);
       }
   }
 
@@ -151,27 +151,25 @@ void loop()
             delay(5000);
             return;
            }
-           const char * id = parsed["id"]; //Get id type value
-           const char * hit = parsed["hit"]; 
-          if( id == "device1" )
+           const String id = parsed["id"]; //Get id type value
+           const String hit = parsed["hit"]; 
+          if( id == "device1" && hit == "true")
           {
-            if(hit == "true")
-            {
+              Serial.println("device2 hit true");
               digitalWrite(13, HIGH);
               delay(300);
               digitalWrite(13, LOW);
-            }
-            else
-            {
-              digitalWrite(13, HIGH);
-              delay(300);
-              digitalWrite(13, LOW);
-              delay(300);
-              digitalWrite(13, HIGH);
-              delay(300);
-              digitalWrite(13, LOW);
-            }
           }
+          else if(id == "device2" && hit == "true")
+          {
+              digitalWrite(13, HIGH);
+              delay(300);
+              digitalWrite(13, LOW);
+              delay(300);
+              digitalWrite(13, HIGH);
+              delay(300);
+              digitalWrite(13, LOW);
+            }
         }
 
         if(RID == "win")

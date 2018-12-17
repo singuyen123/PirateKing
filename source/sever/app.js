@@ -16,7 +16,7 @@ var http = require('http');					//#include thu vien http -
 var socketio = require('socket.io');			//#include thu vien socketio
 var server = http.createServer(app);
 var io = socketio(server);
-var map1, map2, turn = 0, ready=0;
+var map1, map2, turn = 0, ready = 0;
 var room = [{}];
 server.listen(PORT, function () {
     console.log("Server running at address: " + ip.address() + ":" + PORT)
@@ -98,6 +98,7 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                     //     room[0].id = 1;
                     //     room[0].available = 1;
                     // }
+
                     switch (message) {
                         case 'device1':
                             socket.emit('request-pickRoom', true, room[room.length - 1].id)
@@ -111,8 +112,11 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                             socket.emit('request-pickRoom', false, room[room.length - 1].id)
                             break;
                     }
+                    socket.broadcast.emit('device-info', device)
+                    socket.emit('device-info', device)
                 })
                 socket.on('quick-join', function (message) {
+
                     // var i;
                     // for (i in room) {
                     //     console.log(i);
@@ -140,6 +144,8 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                             socket.emit('request-quickJoin', false, room[i].id)
                             break;
                     }
+                    socket.broadcast.emit('device-info', device)
+                    socket.emit('device-info', device)
                 })
                 socket.emit('connection', 'device1');
                 break;
@@ -185,31 +191,49 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
         console.log(message);
     });
 
+
     //Khi lang nghe duoc lenh "connection" voi mot tham so, va chung ta dat ten tham so la message.
     //'connection' (2)
 
     socket.on('info_map_1', function (message, room_info) {
         map1 = message;
-        console.log(map1);
+        //console.log(map1);
         socket.broadcast.emit('recive_map_1', message)
         ready++;
-        socket.broadcast.emit('turn',0,ready)
-        socket.emit('turn',0,ready)
+        socket.broadcast.emit('turn', 0, ready)
+        socket.emit('turn', 0, ready)
     })
 
     socket.on('info_map_2', function (message, room_info) {
         map2 = message;
-        console.log(map2);
+        //console.log(map2);
         socket.broadcast.emit('recive_map_2', message)
         ready++;
-        socket.broadcast.emit('turn',0,ready)
-        socket.emit('turn',0,ready)
+        socket.broadcast.emit('turn', 0, ready)
+        socket.emit('turn', 0, ready)
     })
-
+    socket.on('toggle', function (msg) {
+        console.log('abc:'+msg)
+        turn = msg == 1 ? 0 : 1;
+        console.log('turn:'+turn)
+        socket.emit('turn', turn, ready)
+        socket.broadcast.emit('turn', turn, ready)
+    })
+    socket.on('end_game',function(msg){
+        turn=0;
+        ready=0;
+        map1=[[]];
+        map2=[[]];
+        if(msg=='device1'){
+            socket.broadcast.emit('lose','device2');
+        }else {socket.broadcast.emit('lose','device1')}   
+    })
     socket.on('location_hit', function (message) {
-        var info_hit={};
+        var info_hit = {};
         var i
         console.log(message);
+        console.log(turn);
+        console.log(ready);
         // for (i in room) {
         //     if (room[i] == message.id) {
         //         room[i].turn =0;
@@ -217,47 +241,47 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
         //     }
         // }
         // if (room[i].available == 2 && room[i]) {
-            if (message.id == 'device1' && turn == 0 && ready ==2) {
-                if (map2[message.j][message.i] == 1 && ready == 2) {
-                    info_hit.id = 'device1';
-                    info_hit.hit = true;
-                    socket.broadcast.emit('hit', info_hit);
-                    socket.emit('hit', info_hit);
-                    console.log('1');
-                    turn = 1;
-                    socket.broadcast.emit('turn',1,ready)
-                    socket.emit('turn',1,ready)
-                } else {
-                    info_hit.id = 'device1';
-                    info_hit.hit = false;
-                    socket.broadcast.emit('hit', info_hit);
-                    socket.emit('hit', info_hit);
-                    console.log('2');
-                    turn = 1;
-                    socket.broadcast.emit('turn',1,ready)
-                    socket.emit('turn',1,ready)
-                }
-            } else if (message.id == 'device2' && turn == 1 && ready ==2) { 
-                if (map1[message.j][message.i] == 1) {
-                    info_hit.id = 'device2';
-                    info_hit.hit = true;
-                    socket.broadcast.emit('hit', info_hit);
-                    socket.emit('hit', info_hit);
-                    turn = 0;
-                    console.log('3');
-                    socket.broadcast.emit('turn',0,ready)
-                    socket.emit('turn',0,ready)
-                } else {
-                    info_hit.id = 'device2';
-                    info_hit.hit = false;
-                    socket.broadcast.emit('hit', info_hit);
-                    socket.emit('hit', info_hit);
-                    turn = 0;
-                    console.log('4');
-                    socket.broadcast.emit('turn',0,ready)
-                    socket.emit('turn',0,ready)
-                }
+        if (message.id == 'device1' && turn == 0 && ready == 2) {
+            if (map2[message.j][message.i] == 1 && ready == 2) {
+                info_hit.id = 'device1';
+                info_hit.hit = true;
+                socket.broadcast.emit('hit', info_hit);
+                socket.emit('hit', info_hit);
+                console.log('1');
+                turn = 1;
+                socket.broadcast.emit('turn', 1, ready)
+                socket.emit('turn', 1, ready)
+            } else {
+                info_hit.id = 'device1';
+                info_hit.hit = false;
+                socket.broadcast.emit('hit', info_hit);
+                socket.emit('hit', info_hit);
+                console.log('2');
+                turn = 1;
+                socket.broadcast.emit('turn', 1, ready)
+                socket.emit('turn', 1, ready)
             }
+        } else if (message.id == 'device2' && turn == 1 && ready == 2) {
+            if (map1[message.j][message.i] == 1) {
+                info_hit.id = 'device2';
+                info_hit.hit = true;
+                socket.broadcast.emit('hit', info_hit);
+                socket.emit('hit', info_hit);
+                turn = 0;
+                console.log('3');
+                socket.broadcast.emit('turn', 0, ready)
+                socket.emit('turn', 0, ready)
+            } else {
+                info_hit.id = 'device2';
+                info_hit.hit = false;
+                socket.broadcast.emit('hit', info_hit);
+                socket.emit('hit', info_hit);
+                turn = 0;
+                console.log('4');
+                socket.broadcast.emit('turn', 0, ready)
+                socket.emit('turn', 0, ready)
+            }
+        }
         //}
     })
 
