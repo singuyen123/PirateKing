@@ -1,5 +1,5 @@
 
-const PORT = 3000;
+const PORT = 80;
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var mongodbUrl = "mongodb://localhost:27017/Pirateking";
