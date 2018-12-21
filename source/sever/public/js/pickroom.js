@@ -1,7 +1,7 @@
 var socket = io()
 var userInfo = {}
 socket.on('connect', () => {
-    socket.emit('type', 'pickroom');
+    socket.emit('type', 'select_device');
     socket.on('device-info', function (message) {
         console.log(message)
         if (message[0]){
@@ -26,42 +26,28 @@ socket.on('connect', () => {
         'username': username,
         'seasion': seasionKey
     });
-    socket.on('queryLogin', function (data) {
+    /*socket.on('queryLogin', function (data) {
         if (data.seasionStatus) {
             userInfo = data.userInfo;
         } else {
             window.location.href = window.location.protocol + '//' + window.location.host;
         }
-    })
+    })*/
     socket.on('request-pickRoom',function(message,roomId){
-        document.cookie = 'room=' + roomId + ';';
         var txt = document.getElementById('message')
         if(message)
-        window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
+        window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/room.html';
         else {
             txt.textContent = "Please choice device";
             txt.style.visibility = "visible";
         }
     })
-    socket.on('request-quickJoin',function(message,roomId){
-        document.cookie = 'room=' + roomId + ';';
-        var txt = document.getElementById('message')
-        if(message)
-        window.location.href = window.location.protocol + '//' + window.location.host + '/public/html/index.html';
-        else {
-            txt.textContent = "Please choice device";
-            txt.style.visibility = "visible";
-        }
-    })
+    
 
 })
 function createRoom() {
     document.cookie = 'device=' + getDevice() + ';';
-    socket.emit('create-room', getDevice());
-}
-function quickJoin() {
-    document.cookie = 'device=' + getDevice() + ';';
-    socket.emit('quick-join', getDevice());
+    socket.emit('select', getDevice());
 }
 
 function getDevice() {

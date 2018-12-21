@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/public/css/room.css">
+
+</head>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="/public/js/room.js"></script>
+
+
+<body>
+    <div class="pickroom-page">
+        <div class="form">
+            <form class="pickroom-form">
+                <p id="message" style="color: red; visibility: hidden;">Message</p>
+                <select id="ddlViewBy">
+                    <option id=0 value="Room1">Room1(0/2)</option>
+                    <option id=1 value="Room2">Room2(0/2)</option>
+                    <option id=2 value="Room3">Room3(0/2)</option>
+                    <option id=3 value="Room4">Room4(0/2)</option>
+                </select>
+                <button onclick="joinRoom()" type="button" id="btn_join">join Room</button>
+        </div>
+    </div>
+</body>
+
+
+</html>

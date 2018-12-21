@@ -17,7 +17,7 @@ var socketio = require('socket.io');			//#include thu vien socketio
 var server = http.createServer(app);
 var io = socketio(server);
 var map1, map2, turn = 0, ready = 0;
-var room = [{}];
+var room = [0, 0, 0, 0];
 server.listen(PORT, function () {
     console.log("Server running at address: " + ip.address() + ":" + PORT)
 })
@@ -27,7 +27,7 @@ app.get('/', function (req, res) {
     res.sendfile('public/html/signin.html');
 });
 
-var device = [false, false, false];
+var device = [true, true, true];
 io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'connection' (2)
     console.log("Connected_nnnambang"); //In ra windowm console la da co mot Socket Client ket noi thanh cong.
     socket.on('type', function (msg) {
@@ -46,6 +46,7 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                                 dataObject.seasionStatus = true;
                                 dataObject.userInfo = message;
                                 socket.emit('queryLogin', dataObject);
+                                console.log(dataObject);
                             } else {
                                 dataObject.seasionKeyStatus = false;
                                 socket.emit('queryLogin', dataObject);
@@ -71,7 +72,7 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                     });
                 });
                 break;
-            case 'pickroom':
+            case 'select_device':
                 socket.emit('device-info', device)
                 console.log(device);
                 socket.on('seasion-info', function (message) {
@@ -93,12 +94,7 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                         });
                     });
                 })
-                socket.on('create-room', function (message) {
-                    // if(room == null){
-                    //     room[0].id = 1;
-                    //     room[0].available = 1;
-                    // }
-
+                socket.on('select', function (message) {
                     switch (message) {
                         case 'device1':
                             socket.emit('request-pickRoom', true, room[room.length - 1].id)
@@ -115,41 +111,82 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
                     socket.broadcast.emit('device-info', device)
                     socket.emit('device-info', device)
                 })
-                socket.on('quick-join', function (message) {
-
-                    // var i;
-                    // for (i in room) {
-                    //     console.log(i);
-                    //     console.log(room);
-                    //     if (room[i].available == 1) {
-                    //         room[i].available = 2
-                    //         console.log(i);
-                    //         break;
-                    //     }
-                    //     if (i == room.length - 1) {
-                    //         room[i].id = room.length + 1;
-                    //         room[i + 1].available = 1;
-                    //     }
-                    // }
-                    switch (message) {
-                        case 'device1':
-                            socket.emit('request-quickJoin', true, room[i].id)
-                            device[0] = false;
+            case 'room':
+                socket.emit('info_room', room);
+                socket.on('select_room', function (msg) {
+                    switch (msg) {
+                        case "Room1":
+                            if (room[0] < 2) {
+                                room[0]++;
+                                socket.emit('respone_room', true)
+                            } else socket.emit('respone_room', false)
                             break;
-                        case 'device2':
-                            socket.emit('request-quickJoin', true, room[i].id)
-                            device[1] = false;
+                        case "Room2":
+                            if (room[1] < 2) {
+                                room[1]++;
+                                socket.emit('respone_room', true)
+                            } else socket.emit('respone_room', false)
                             break;
-                        default:
-                            socket.emit('request-quickJoin', false, room[i].id)
+                        case "Room3":
+                            if (room[2] < 2) {
+                                room[2]++;
+                                socket.emit('respone_room', true)
+                            } else socket.emit('respone_room', false)
+                            break;
+                        case "Room4":
+                            if (room[3] < 2) {
+                                room[3]++;
+                                socket.emit('respone_room', true)
+                            } else socket.emit('respone_room', false)
                             break;
                     }
-                    socket.broadcast.emit('device-info', device)
-                    socket.emit('device-info', device)
+                    socket.emit('info_room', room);
+                    socket.broadcast.emit('info_room', room);
+
                 })
-                socket.emit('connection', 'device1');
                 break;
-            case 'player1':
+            case 'index':
+                socket.emit('info_room', room);
+                socket.on('logout', function (msg, msg1) {
+                    console.log(msg)
+                    if (msg == "device1") { device[0] = true; }
+                    else { device[1] = true }
+                    switch (msg1) {
+                        case "Room1":
+                            room[0]--;
+                            break;
+                        case "Room2":
+                            room[1]--;
+                            break;
+                        case "Room3":
+                            room[2]--;
+                            break;
+                        case "Room4":
+                            room[3]--;
+                            break;
+                    }
+                    
+                })
+                socket.on('change_device', function (msg, msg1) {
+                    if (msg == "device1") { device[0] = true; }
+                    else { device[1] = true }
+                    switch (msg1) {
+                        case "Room1":
+                            room[0]--;
+                            break;
+                        case "Room2":
+                            room[1]--;
+                            break;
+                        case "Room3":
+                            room[2]--;
+                            break;
+                        case "Room4":
+                            room[3]--;
+                            break;
+                    }
+                    console.log(msg1);
+                    console.log(device);
+                })
                 socket.on('seasion-info', function (message) {
                     MongoClient.connect(mongodbUrl, function (err, db) {
                         assert.equal(null, err);
@@ -213,20 +250,20 @@ io.on('connection', function (socket) {	//'connection' (1) nay khac gi voi 'conn
         socket.emit('turn', 0, ready)
     })
     socket.on('toggle', function (msg) {
-        console.log('abc:'+msg)
+        console.log('abc:' + msg)
         turn = msg == 1 ? 0 : 1;
-        console.log('turn:'+turn)
+        console.log('turn:' + turn)
         socket.emit('turn', turn, ready)
         socket.broadcast.emit('turn', turn, ready)
     })
-    socket.on('end_game',function(msg){
-        turn=0;
-        ready=0;
-        map1=[[]];
-        map2=[[]];
-        if(msg=='device1'){
-            socket.broadcast.emit('lose','device2');
-        }else {socket.broadcast.emit('lose','device1')}   
+    socket.on('end_game', function (msg) {
+        turn = 0;
+        ready = 0;
+        map1 = [[]];
+        map2 = [[]];
+        if (msg == 'device1') {
+            socket.broadcast.emit('lose', 'device2');
+        } else { socket.broadcast.emit('lose', 'device1') }
     })
     socket.on('location_hit', function (message) {
         var info_hit = {};
@@ -328,8 +365,8 @@ function checkLoginAccount(username, password, callback) {
                 // Generate Seasion key
                 var str = "";
                 for (; str.length < 32; str += Math.random().toString(36).substr(2));
-                resultObject.seasionKey = str.substr(0, 32);
-
+                resultObject.seasionKey = str.substr(0, 32);8
+                
                 var updateValue = {
                     $set: {
                         'seasionKey': resultObject.seasionKey,
